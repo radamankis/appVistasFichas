@@ -6,7 +6,7 @@ class Usuario extends Component {
 state = {
     users:[]
 
-    }
+    };
 
 componentDidMount() {
     fetch('/users')

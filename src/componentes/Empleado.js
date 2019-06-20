@@ -14,9 +14,12 @@ export default class Empleado extends Component {
             <div className="card-body ">
                 <h2 className="card-title text-center mb-5">Ingrese los datos del nuevo Empleado
                 </h2>
+                
                 <form>
+                
             <fieldset>
             <legend 
+            
             className="text-center">Datos Personales del Empleado
             </legend>
             <div className="card mt-3 py-2 card border-dark mb-3">

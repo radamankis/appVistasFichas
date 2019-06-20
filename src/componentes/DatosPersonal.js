@@ -1,9 +1,10 @@
 import React,{Component} from 'react';
 import axios from 'axios';
 
-export default class Perfil extends Component   {
-    
-    state={ buscar:'',
+
+export default class DatosPersonal extends Component {
+ 
+    state={
             Nombre:'',
             Apellido:'',
             Cedula:'',
@@ -11,7 +12,8 @@ export default class Perfil extends Component   {
             EstadoCivil:'',
             Nacionalidad:'',
             NHijos:'',
-            FechaNacimiento:''
+            FechaNacimiento:'',
+            
         };
 
         valueToState = ({ name, value, checked, type }) => {
@@ -21,72 +23,52 @@ export default class Perfil extends Component   {
           };
 
 
-            
-              componentWillUpdate( nextProps, nextState){
-                  
-                localStorage.setItem('buscar', 'algo');
-              }  
-
-              handleSubmit (e){
+            handleSubmit (e){
                 e.preventDefault();
-                const busca= this.state.buscar;
-                axios.get(`/datospersonal/buscar/${busca}`)
-                .then( res=>{
-                    console.log(res.data.data)
-                   const date=new Date( res.data.data[0].FechaNacimiento);
-                    const fecha= date.getDate() +'/'+(date.getMonth())+'/'+(date.getFullYear());
-                    this.setState({ 
-                        Nombre: res.data.data[0].Nombre,
-                        Apellido: res.data.data[0].Apellido,
-                        Cedula: res.data.data[0].Cedula,
-                        Sexo: res.data.data[0].Sexo,
-                        FechaNacimiento: fecha ,
-                        EstadoCivil: res.data.data[0].EstadoCivil,
-                        Nacionalidad: res.data.data[0].Nacionalidad,
-                        NHijos: res.data.data[0].NHijos
-                    })
-                })
-                
-               
-
+                const datos = { 
+                    Nombre: this.state.Nombre,
+                    Apellido:this.state.Apellido,
+                    Cedula: this.state.Cedula,
+                    Sexo:this.state.Sexo,
+                    EstadoCivil: this.state.EstadoCivil,
+                    Nacionalidad: this.state.Nacionalidad,
+                    NHijos: this.state.NHijos,
+                    FechaNacimiento: this.state.FechaNacimiento
+                }
+               console.log(this.metodo(datos)) ;
+                    
                
         }
-              // console.log(this.metodo(datos)) ;
 
-               
-               
-        
 
-        // async metodo(datos){
-        //    const respuesta = await axios({
-        //        method: 'POST',
-        //        url: '/datospersonal',
-        //        data: datos
-        //    }) 
-        //     .then(res =>{
-        //         console.log(res);
-        //         console.log(res.data);
-        //     })
+        async metodo(datos){
+           const respuesta = await axios({
+               method: 'POST',
+               url: '/datospersonal',
+               data: datos
+           }) 
+            .then(res =>{
+                console.log(res);
+                console.log(res.data);
+            })
 
-        //     return respuesta;
-        // }
+            return respuesta;
+        }
 
     render() {
         return (
-            <div><h2 className="card-title text-center mb-5">Sistema de Administracion de Personal
-           </h2>
+            
+           <div><h2 className="card-title text-center mb-5">Sistema de Administracion de Personal
+           </h2> 
          <div className="form-group card border-dark  ">
-   
+             
             <div className="card mt-3  ">
+                
             <div className="card-body ">
-                <h2 className="card-title text-center mb-5">Datos del  Empleado
+                <h2 className="card-title text-center mb-5">Ingrese los datos del nuevo Empleado
                 </h2>
                 {/* <pre>{JSON.stringify(this.state, null, 2)}</pre> */}
-                <form >
-                <form className="form-inline my-2 my-lg-0" onSubmit={this.handleSubmit.bind(this)} >
-      <input className="form-control mr-sm-2 auto" type="text" placeholder="Search" name="buscar" onChange={event => this.valueToState(event.target)}/>
-      <button className="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-    </form>
+                <form onSubmit={this.handleSubmit.bind(this)}>
             <fieldset>
             <legend 
             className="text-center">Datos Personales del Empleado
@@ -104,7 +86,6 @@ export default class Perfil extends Component   {
                     id="Nombre" 
                     aria-describedby="nombreHelp" 
                     placeholder="Ingrese Nombre "
-                    value={this.state.Nombre}
                     onChange={event => this.valueToState(event.target)}/>
                 
                 </div>
@@ -119,7 +100,6 @@ export default class Perfil extends Component   {
                     name="Apellido" 
                     aria-describedby="apellidoHelp" 
                     placeholder="Ingrese Apellido "
-                    value={this.state.Apellido}
                     onChange={event => this.valueToState(event.target)}/>
                 
                 </div>
@@ -137,7 +117,6 @@ export default class Perfil extends Component   {
                     name="Cedula" 
                     aria-describedby="cedulaHelp" 
                     placeholder="Ingrese Cedula "
-                    value={this.state.Cedula}
                     onChange={event => this.valueToState(event.target)}/>
                 
                 </div>
@@ -155,10 +134,9 @@ export default class Perfil extends Component   {
 
                 <div className="form-group col-3">
                 <label className="fechaDeNacimiento">Fecha De Nacimiento</label>
-                <input type="text" 
+                <input type="date" 
                 className="form-control " 
                 name="FechaNacimiento" 
-                value={ this.state.FechaNacimiento}
                 onChange={event => this.valueToState(event.target)}/>
                 </div>
 
@@ -177,13 +155,12 @@ export default class Perfil extends Component   {
                 <div className="form-group ">
                 <label htmlFor="Sexo">Sexo</label>
                 <div className="form-group ">
-                <input type='radio' name="Sexo" value='masculino'
-                                
-                checked={this.state.Sexo === 'masculino'}
+                <input type='radio' name="Sexo" value='masculino'                
+                checked={this.state.sexo }
                 onChange={event => this.valueToState(event.target)}/> Masculino
                 
                 <input type='radio' name="Sexo" value='femenino'
-                checked={this.state.Sexo === 'femenino' }
+                checked={this.state.sexo  }
                 onChange={event => this.valueToState(event.target)}/> Femenino
 
 
@@ -203,7 +180,6 @@ export default class Perfil extends Component   {
                     name="Nacionalidad" 
                     aria-describedby="nacionalidadHelp" 
                     placeholder="Ingrese Nacionalidad "
-                    value={this.state.Nacionalidad}
                     onChange={event => this.valueToState(event.target)}/>
                 
                 </div>
@@ -213,7 +189,6 @@ export default class Perfil extends Component   {
                 <select className="form-control  "
                 id="EstadoCivil"
                 name="EstadoCivil"
-                value={this.state.EstadoCivil}
                 onChange={event => this.valueToState(event.target)}>
                     <option>Soltero</option>
                     <option>Casado</option>
@@ -232,25 +207,28 @@ export default class Perfil extends Component   {
                 name="NHijos" 
                 aria-describedby="nacionalidadHelp" 
                 placeholder="ingreso un numero ejem: 3 "
-                value={this.state.NHijos}
                 onChange={event => this.valueToState(event.target)}/>
                 </div>
                 </div>
                 </div>
+                
                 </div>
                 
-                
+                 
                 </fieldset>
 
-                
-       
+                <div className="modal-footer">
+        <button type="submit" className="btn btn-primary btn-block" href="http://localhost:3000/postgrado">Crear</button>
         
-      
+      </div>
                 </form>
+                
                 </div>
                 </div>
                 </div>
-            </div>
+                
+                </div>
+
         )
     }
 }

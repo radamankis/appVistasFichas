@@ -3,14 +3,16 @@ import {Link} from 'react-router-dom'
 
 const Header = ()=>  (  
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div className="container">
-                <Link to="/login" className="navbar-brand">
-                    Sistema de Administracion de Personal
+            {/* <div><Link to="/login" className="navbar-brand">
+                    Login
                 </Link>
+                </div> */}
+            <div className="container">
+                
 
                 <ul className="navbar-nav mr-auto">
                     <li className="navbar-item">
-                        <Link to='/empleado'
+                        <Link to='/datospersonal'
                         className="nav-link">
                             Agregar Empleados
                         </Link>
@@ -22,15 +24,49 @@ const Header = ()=>  (
                         </Link>
                     </li>
                     <li className="navbar-item">
-                        <Link to='/listar-empleados'
+                        <Link to='/cargo'
                         className="nav-link">
-                            Listar Empleados
+                            Cargo
                         </Link>
                     </li>
                     <li className="navbar-item">
-                        <Link to='/listar-usuarios'
+                        <Link to='/formacion'
+                        className="nav-link">
+                            Formacion Academica
+                        </Link>
+                    </li>
+                    <li className="navbar-item">
+                        <Link to='/postgrado'
+                        className="nav-link">
+                            Postgrado
+                        </Link>
+                    </li>
+                    <li className="navbar-item">
+                        <Link to='/remuneracion'
+                        className="nav-link">
+                            Remuneracion
+                        </Link>
+                    </li>
+                    
+                    <li className="navbar-item">
+                        <Link to='/tipocargo'
+                        className="nav-link">
+                            Tipo Cargo
+                        </Link>
+                    </li>
+                    
+                    
+                    <li className="navbar-item">
+                        <Link to='/users'
                         className="nav-link">
                             Listar Usuarios
+                        </Link>
+                    </li>
+
+                    <li className="navbar-item">
+                        <Link to='/listarempleados'
+                        className="nav-link">
+                            Listar Empleados
                         </Link>
                     </li>
                     <li className="navbar-item">
@@ -39,9 +75,14 @@ const Header = ()=>  (
                             Perfil
                         </Link>
                     </li>
+                    {/* <div><Link to="/logout" className="navbar-brand">
+                    Salir
+                </Link>
+                </div> */}
                 </ul>
             </div>
         </nav>
+        
     );
 
 
