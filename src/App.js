@@ -16,6 +16,7 @@ import ListarUsuarios from './componentes/ListarUsuarios';
 
  import ListarEmpleados from './componentes/ListarEmpleados';
 import Perfil from './componentes/Perfil';
+import Perfil2 from './componentes/Perfil2';
 import Principal from './componentes/Principal';
 
 //import FormularioUsuario from './FormularioUsuario';
@@ -27,7 +28,8 @@ const MyRoute = ( props)=>(
   ? <Route {...props}/> : <Redirect to ="/login"/>
 )
 
-const logout = ()=>{
+const Logout = ()=>{
+  localStorage.clear();
   return <Redirect to="/login"/>
 }
 
@@ -35,7 +37,8 @@ const logout = ()=>{
  class App extends Component {
  
   state= {
-     Cedula:[]
+     Cedula:[],
+     estado: localStorage.getItem('role')
     }
 
     componentDidMount(){ 
@@ -51,11 +54,12 @@ const logout = ()=>{
   render() {
     return (
       <Router>
-        <Header/>
+        <Header estado={this.state.estado}/>
         <main className="container mt-5">
        <Switch>
-       {/* <Route exact path="/login" component={Login}/>
-       <Route exact path="/logout" component={logout}/> */}
+      <Route exact path="/login" component={Login}/>
+      <Route exact path="/logout" component={Logout}/>
+      
        <Route exact path="/" component={Principal}/>
           <Route exact path="/nuevo-usuario" component={NuevoUsuario}/>
           <Route exact path="/datospersonal" component={DatosPersonal}/>
@@ -65,9 +69,11 @@ const logout = ()=>{
           <Route exact path="/cargo" component={Cargo}/>
           <Route exact path="/tipocargo" component={TipoCargo}/>
           <Route exact path="/users" component={ListarUsuarios }/>
+          <Route exact path="/perfil2" component={Perfil2 }/>
           <Route exact path="/listarempleados" render={()=>
             <ListarEmpleados Cedula={this.state.Cedula} />
           }/>
+          
           <MyRoute exact path="/perfil" component={Perfil}/>
           
        </Switch> 

@@ -2,9 +2,9 @@ import React,{Component} from 'react';
 import axios from 'axios';
 
 export default class Remuneraciones extends Component {
- 
+    
     state={
-        idDatoPersonal:'',
+        idDatoPersonal: this.props.idDato,
         SueldoTabla:'',
         BonoJefatura:'',
         PrimaFamiliar:'',
@@ -31,14 +31,14 @@ export default class Remuneraciones extends Component {
            async handleSubmit (e){
                 e.preventDefault();
                 const busca= this.state.buscar;
-           await axios.get(`/datospersonal/buscar/${busca}`)
-            .then( res=>{
+        //    await axios.get(`/datospersonal/buscar/${busca}`)
+        //     .then( res=>{
                 
                
-                this.setState({ 
-                   idDatoPersonal: res.data.data[0].idDatoPersonal
-                })
-            })
+        //         this.setState({ 
+        //            idDatoPersonal: res.data.data[0].idDatoPersonal
+        //         })
+        //     })
                 const datos = { 
                     idDatoPersonal: this.state.idDatoPersonal,
                     SueldoTabla: this.state.SueldoTabla,
@@ -77,6 +77,8 @@ export default class Remuneraciones extends Component {
         
 
     render() {
+        const {idDato}= this.props.idDato;
+        
         return (
             <div><h2 className="card-title text-center mb-5">Sistema de Administracion de Personal
            </h2>
@@ -97,9 +99,7 @@ export default class Remuneraciones extends Component {
             <div className="card-body">
                 <div className="form-group row">
                 
-            <div className="form-group col-3">   
-             <input className="form-control mr-sm-2" type="text" placeholder="cedula del empleado" name="buscar" onChange={event => this.valueToState(event.target)}/>
-            </div>
+            
     
             <div className="form-group col-3">
                 <label className="SueldoTabla">SueldoTabla

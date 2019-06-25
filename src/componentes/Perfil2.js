@@ -1,18 +1,11 @@
 import React,{Component} from 'react';
 import axios from 'axios';
-import Remuneraciones from './Remuneraciones';
 
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-
-
+export default class Perfil extends Component   {
     
-  
-import Msj from './Msj';
-
-export default class DatosPersonal extends Component {
-    constructor(props) {
-        super(props);
-   this.state={
+    state={ 
+            username: localStorage.getItem('username'),
+            buscar:'',
             Nombre:'',
             Apellido:'',
             Cedula:'',
@@ -20,30 +13,8 @@ export default class DatosPersonal extends Component {
             EstadoCivil:'',
             Nacionalidad:'',
             NHijos:'',
-            FechaNacimiento:'',
-            btn: false,
-            btn2: false,
-            id:'',
-            formu: false,
-            mensaje:'',
-            modal: false
-            
+            FechaNacimiento:''
         };
-
-        this.toggle = this.toggle.bind(this);
-    }
-        toggle() {
-          const agre= this.validacion();
-           if(agre){
-               this.setState({
-                   btn2: true
-               })
-           }
-            this.setState(prevState => ({
-              modal: !prevState.modal
-             
-            }));
-          }
 
         valueToState = ({ name, value, checked, type }) => {
             this.setState(() => {
@@ -51,87 +22,71 @@ export default class DatosPersonal extends Component {
             });
           };
 
-          validacion(){
-            if(this.state.Nombre === '' || this.state.Apellido=== ''|| this.state.Cedula=== '' || this.state.Sexo ==='' || this.state.EstadoCivil === ''|| this.state.NHijos === '' || this.state.Nacionalidad ==='' || this.state.FechaNacimiento===''){
-                this.setState({
-                    mensaje: 'Todos los campos son Necesarios',
-                    
-                })
-              return false;
-            }
-            console.log(this.state.formu)
-           this.setState({
-                mensaje: 'Empleado Agregado',
-                formu: true
-            });
-            return true;
-          }
-           async handleSubmit  (e){
-                e.preventDefault();
+
+            
+          async    componentWillMount  ( nextProps, nextState){
                
-                  if (!this.validacion()){
-                       return 
-                   }
                 
                 
-                const datos = { 
-                    Nombre: this.state.Nombre,
-                    Apellido:this.state.Apellido,
-                    Cedula: this.state.Cedula,
-                    Sexo:this.state.Sexo,
-                    EstadoCivil: this.state.EstadoCivil,
-                    Nacionalidad: this.state.Nacionalidad,
-                    NHijos: this.state.NHijos,
-                    FechaNacimiento: this.state.FechaNacimiento
-                }
-            await  this.metodo(datos) ;
+                const res= await axios.get (`/datospersonal/buscar/${this.state.username}`)
+                
+                    console.log(res.data.data[0])
+                   const date= await new Date( res.data.data[0].FechaNacimiento);
+                    const fecha= date.getDate() +'/'+(date.getMonth())+'/'+(date.getFullYear());
                     
-               
-        }
-
-
-        async metodo(datos){
-           const respuesta = await axios({
-               method: 'POST',
-               url: '/datospersonal',
-               data: datos
-           }) 
-            .then(res =>{
+                    this.setState({ 
+                        Nombre: res.data.data[0].Nombre,
+                        Apellido: res.data.data[0].Apellido,
+                        Cedula: res.data.data[0].Cedula,
+                        Sexo: res.data.data[0].Sexo,
+                        FechaNacimiento: fecha ,
+                        EstadoCivil: res.data.data[0].EstadoCivil,
+                        Nacionalidad: res.data.data[0].Nacionalidad,
+                        NHijos: res.data.data[0].NHijos
+                    })
                 
-                this.setState({
-                    id:res.data.data.insertId
-                }) 
-                console.log(this.state.id)
-            })
+                  
+               
+              }  ;
 
-            return respuesta;
-        }
+              
 
-        remuneracion(e){
-            this.setState({
-                btn: true,
-                id:this.state.id
-            })
-        }
+            
+        
+              // console.log(this.metodo(datos)) ;
+
+               
+               
+        
+
+        // async metodo(datos){
+        //    const respuesta = await axios({
+        //        method: 'POST',
+        //        url: '/datospersonal',
+        //        data: datos
+        //    }) 
+        //     .then(res =>{
+        //         console.log(res);
+        //         console.log(res.data);
+        //     })
+
+        //     return respuesta;
+        // }
 
     render() {
-        const agregar= this.state.btn2;
-        const rem =this.state.btn;
-        const formulario= this.state.formu;
-       
         return (
             
-           <div><h2 className="card-title text-center mb-5">Sistema de Administracion de Personal
-           </h2> 
+            <div><h2 className="card-title text-center mb-5">Sistema de Administracion de Personal
+           </h2>
          <div className="form-group card border-dark  ">
-             
+   
             <div className="card mt-3  ">
-                
             <div className="card-body ">
-                <h2 className="card-title text-center mb-5">Ingrese los datos del nuevo Empleado
+                <h2 className="card-title text-center mb-5">Datos del  Empleado
                 </h2>
                 {/* <pre>{JSON.stringify(this.state, null, 2)}</pre> */}
-                <form onSubmit={this.handleSubmit.bind(this)}>
+                <form >
+                
             <fieldset>
             <legend 
             className="text-center">Datos Personales del Empleado
@@ -149,6 +104,7 @@ export default class DatosPersonal extends Component {
                     id="Nombre" 
                     aria-describedby="nombreHelp" 
                     placeholder="Ingrese Nombre "
+                    value={this.state.Nombre}
                     onChange={event => this.valueToState(event.target)}/>
                 
                 </div>
@@ -163,6 +119,7 @@ export default class DatosPersonal extends Component {
                     name="Apellido" 
                     aria-describedby="apellidoHelp" 
                     placeholder="Ingrese Apellido "
+                    value={this.state.Apellido}
                     onChange={event => this.valueToState(event.target)}/>
                 
                 </div>
@@ -180,6 +137,7 @@ export default class DatosPersonal extends Component {
                     name="Cedula" 
                     aria-describedby="cedulaHelp" 
                     placeholder="Ingrese Cedula "
+                    value={this.state.Cedula}
                     onChange={event => this.valueToState(event.target)}/>
                 
                 </div>
@@ -197,9 +155,10 @@ export default class DatosPersonal extends Component {
 
                 <div className="form-group col-3">
                 <label className="fechaDeNacimiento">Fecha De Nacimiento</label>
-                <input type="date" 
+                <input type="text" 
                 className="form-control " 
                 name="FechaNacimiento" 
+                value={ this.state.FechaNacimiento}
                 onChange={event => this.valueToState(event.target)}/>
                 </div>
 
@@ -218,12 +177,13 @@ export default class DatosPersonal extends Component {
                 <div className="form-group ">
                 <label htmlFor="Sexo">Sexo</label>
                 <div className="form-group ">
-                <input type='radio' name="Sexo" value='masculino'                
-                checked={this.state.sexo }
+                <input type='radio' name="Sexo" value='masculino'
+                                
+                checked={this.state.Sexo === 'masculino'}
                 onChange={event => this.valueToState(event.target)}/> Masculino
                 
                 <input type='radio' name="Sexo" value='femenino'
-                checked={this.state.sexo  }
+                checked={this.state.Sexo === 'femenino' }
                 onChange={event => this.valueToState(event.target)}/> Femenino
 
 
@@ -243,6 +203,7 @@ export default class DatosPersonal extends Component {
                     name="Nacionalidad" 
                     aria-describedby="nacionalidadHelp" 
                     placeholder="Ingrese Nacionalidad "
+                    value={this.state.Nacionalidad}
                     onChange={event => this.valueToState(event.target)}/>
                 
                 </div>
@@ -252,6 +213,7 @@ export default class DatosPersonal extends Component {
                 <select className="form-control  "
                 id="EstadoCivil"
                 name="EstadoCivil"
+                value={this.state.EstadoCivil}
                 onChange={event => this.valueToState(event.target)}>
                     <option>Soltero</option>
                     <option>Casado</option>
@@ -270,44 +232,25 @@ export default class DatosPersonal extends Component {
                 name="NHijos" 
                 aria-describedby="nacionalidadHelp" 
                 placeholder="ingreso un numero ejem: 3 "
+                value={this.state.NHijos}
                 onChange={event => this.valueToState(event.target)}/>
                 </div>
                 </div>
                 </div>
-                
                 </div>
                 
-                 
+                
                 </fieldset>
 
-                <div className="modal-footer">
-        <button onClick={this.toggle} type="submit" className="btn btn-primary btn-block"   >Crear</button>
                 
-      </div>
-                </form>
-                {agregar ? <button type="btn" className="btn btn-primary btn-block" onClick={this.remuneracion.bind(this)}  >Agregar Remuneraciones</button> : ''}
-                </div>
-
-                </div> 
-              
-               <div>
+       
         
-        <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-          <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
-          <ModalBody>
-              {this.state.mensaje}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={this.toggle}>OK</Button>
-            
-          </ModalFooter>
-        </Modal>
-      </div>
+      
+                </form>
                 </div>
-               
-                { rem ? <Remuneraciones idDato= {this.state.id}/> : ''}
                 </div>
-               
+                </div>
+            </div>
         )
     }
 }

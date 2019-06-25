@@ -12,6 +12,7 @@ export default class NuevoUsuario extends Component {
            </h2>
            <h3 className="card-title text-center mb-5">Puede comenzar agregando un empleado</h3>
            <h3 className="card-title text-center mb-5">Luego Crear su Cuenta de Usuario</h3>
+           <h3 className="card-title text-center mb-5">Puede comenzar agregando un empleado</h3>
            </div>
         )
     }

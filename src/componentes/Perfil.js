@@ -3,7 +3,9 @@ import axios from 'axios';
 
 export default class Perfil extends Component   {
     
-    state={ buscar:'',
+    state={ 
+            username: this.props.username,
+            buscar:'',
             Nombre:'',
             Apellido:'',
             Cedula:'',
@@ -22,19 +24,15 @@ export default class Perfil extends Component   {
 
 
             
-              componentWillUpdate( nextProps, nextState){
-                  
-                localStorage.setItem('buscar', 'algo');
-              }  
-
-              handleSubmit (e){
-                e.preventDefault();
-                const busca= this.state.buscar;
-                axios.get(`/datospersonal/buscar/${busca}`)
-                .then( res=>{
-                    console.log(res.data.data)
-                   const date=new Date( res.data.data[0].FechaNacimiento);
+          async    componentWillMount  ( nextProps, nextState){
+               
+                
+                const res= await axios.get (`/datospersonal/buscar/${this.state.username}`)
+                
+                    console.log(res.data.data[0])
+                   const date= await new Date( res.data.data[0].FechaNacimiento);
                     const fecha= date.getDate() +'/'+(date.getMonth())+'/'+(date.getFullYear());
+                    
                     this.setState({ 
                         Nombre: res.data.data[0].Nombre,
                         Apellido: res.data.data[0].Apellido,
@@ -45,12 +43,15 @@ export default class Perfil extends Component   {
                         Nacionalidad: res.data.data[0].Nacionalidad,
                         NHijos: res.data.data[0].NHijos
                     })
-                })
                 
+                  
                
+              }  ;
 
-               
-        }
+              
+
+            
+        
               // console.log(this.metodo(datos)) ;
 
                
@@ -83,10 +84,7 @@ export default class Perfil extends Component   {
                 </h2>
                 {/* <pre>{JSON.stringify(this.state, null, 2)}</pre> */}
                 <form >
-                <form className="form-inline my-2 my-lg-0" onSubmit={this.handleSubmit.bind(this)} >
-      <input className="form-control mr-sm-2 auto" type="text" placeholder="Search" name="buscar" onChange={event => this.valueToState(event.target)}/>
-      <button className="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-    </form>
+                
             <fieldset>
             <legend 
             className="text-center">Datos Personales del Empleado

@@ -1,17 +1,37 @@
 import React,{Component} from 'react';
+
 import axios from 'axios';
+import {Redirect} from 'react-router-dom' ;
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
-export default class NuevoUsuario extends Component {
 
 
-  state = {
+export default class Login extends Component {
+
+  constructor(props) {
+    super(props);
+  this.state = {
 
     username:'',
     
     password:'',
     
-    token:''
+    token: '',
+    mensaje:'',
+    Empleado:false,
+    ADMIN: false,
+    USER: false
   }
+  this.toggle = this.toggle.bind(this);
+  }
+  toggle() {
+    const agre= this.validacion();
+    
+      this.setState(prevState => ({
+        modal: !prevState.modal
+       
+      }));
+    }
 
   onChange(e){
     this.setState({
@@ -30,31 +50,58 @@ export default class NuevoUsuario extends Component {
 
   }
 
- async handleSingIn(){
-    try{
-
-      await axios({
+ async handleSingIn(e){
+  e.preventDefault();
+    
+        const dato =  {username: this.state.username,
+                        password: this.state.password
+                      };
+    const res =  await axios({
         method: 'POST',
         url: '/login',
-        data: {
-          username: this.state.username,
-          password: this.state.password
-        }
-      }).then( res =>{
-        console.log(res.data);
+        data: dato
+        
       })
+      console.log(res.data.data)
+       const {ok , token,data, err}=res.data;
       
-      // localStorage.setItem('isAuthenticated', true);
-      // localStorage.setItem('token', response);
-      // localStorage.setItem('idUsuario', response.data[0].idUsuario)
-    }
-    catch(err){
-      this.setState({
-        servicio: err
-      })
-    }
-  }
-
+      if(!ok){
+        this.setState({
+          logueado: false,
+          mensaje: err.mensage
+        })
+      } else{
+        this.setState({
+          logueado: true,
+          mensaje: "Logueado Correctamente"
+        })
+        localStorage.setItem('token', token);
+         localStorage.setItem('username', res.data.data.username);
+         localStorage.setItem('role', res.data.data.role);
+        
+         if(res.data.data.role === 'Empleado' ){
+            this.setState({
+              Empleado: true
+            })
+         }
+         if(res.data.data.role === 'USER' ){
+          this.setState({
+            USER: true
+          })
+       }
+       if(res.data.data.role === 'ADMIN' ){
+        this.setState({
+          ADMIN: true
+        })
+     }
+      }
+      
+     
+      
+    
+      }
+    
+  
   validacion(){
     if(this.state.username ==='' || this.state.password==='' ){
       this.setState({
@@ -66,6 +113,9 @@ export default class NuevoUsuario extends Component {
   }
 
     render() {
+      const vista= this.state.Empleado;
+      const vista2= this.state.USER;
+      const vista3= this.state.ADMIN;
         return (
             <div >
             <div  >
@@ -113,7 +163,7 @@ export default class NuevoUsuario extends Component {
 
 
 
-        <button  type="submit" className="btn btn-success btn-lg btn-block">Ingresar</button>
+        <button onClick={this.toggle} type="submit" className="btn btn-success btn-lg btn-block">Ingresar</button>
         
       
 
@@ -122,9 +172,20 @@ export default class NuevoUsuario extends Component {
 </form>
 </div>
 </div>
+<Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+          <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+          <ModalBody>
+              {this.state.mensaje}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.toggle}>OK</Button>
+            
+          </ModalFooter>
+        </Modal>
 
-
-
+         { vista && <Redirect to='/perfil2'/> }  
+         { vista2 && <Redirect to='/listarempleados'/> } 
+         { vista3 && <Redirect to='/nuevo-usuario'/> } 
 
 
             </div>                

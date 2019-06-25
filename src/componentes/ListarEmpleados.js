@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import axios from 'axios';
+import Tabla from './tabla'
 
 
 class ListarEmpleados extends Component {
@@ -41,11 +42,10 @@ componentDidMount() {
                
                 <div>
         
-                <h1 >PRUEBA</h1>
-                     <ul>   
-                        {this.state.datos.map( dato => 
-                            <li key={dato.idDatoPersonal}>{dato.Nombre } - {dato.Apellido} - {dato.Cedula}</li>)}
-                        </ul>
+                
+                <div className='container'>
+                    <Tabla users={this.state.users}/>
+                    </div>
                 </div> 
                 </div>
             );

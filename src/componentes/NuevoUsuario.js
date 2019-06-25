@@ -51,8 +51,10 @@ export default class NuevoUsuario extends Component {
         
     }
 
-    
-   console.log(this.metodo(datos)) ;
+    if(this.state.message=== 'Todo los campos son necesarios'){
+      return
+    }
+   this.metodo(datos) ;
    this.setState({username:'',
    password:'',
    role:''
@@ -67,7 +69,9 @@ export default class NuevoUsuario extends Component {
         data: datos
     }) 
      .then(res =>{
-         console.log(res);
+         this.setState({
+           message: res.data.msg
+         })
          console.log(res.data);
      })
 
