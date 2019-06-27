@@ -1,22 +1,44 @@
 import React,{Component} from 'react';
 import axios from 'axios';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+
 
 export default class Cargo extends Component {
- 
-    state={
-        idDatoPersonal:'',
+    constructor(props) {
+        super(props);
+   this.state={
+        idDatoPersonal:this.props.idDato,
         Nucleo:'',
         CodigoNucleo:'',
         Localizacion:'',
         Dependencia:'',
         DenominacionCargo:'',
+        CargoActual:'',
         CargoActualUdo: '',
         idCargoOpsu:'',
         FechaDesdeOtra: '',
         FechaHastaOtra: '',
-        NombreOtraInstitucion: ''
+        NombreOtraInstitucion: '',
+        mensaje:''
            
         };
+
+        this.toggle = this.toggle.bind(this);
+    }
+
+        toggle() {
+            const agre= this.validacion();
+             if(agre){
+                 this.setState({
+                    mensaje:''
+                     
+                 })
+             }
+              this.setState(prevState => ({
+                modal: !prevState.modal
+               
+              }));
+            }
 
         valueToState = ({ name, value, checked, type }) => {
             this.setState(() => {
@@ -24,18 +46,23 @@ export default class Cargo extends Component {
             });
           };
 
+          validacion(){
+            if(this.state.idDatoPersonal === '' || this.state.Nucleo=== ''|| this.state.CodigoNucleo=== '' || this.state.Localizacion ==='' || this.state.Dependencia === ''|| this.state.DenominacionCargo === '' || this.state.CargoActual ==='' || this.state.idCargoOpsu==='' || this.state.CargoActualUdo==='' ){
+                this.setState({
+                    mensaje: 'Todos los campos son Necesarios',
+                    
+                })
+              return false;
+            }
+            
+           
+            return true;
+          }
+
 
            async handleSubmit (e){
                 e.preventDefault();
-                const busca= this.state.buscar;
-           await axios.get(`/datospersonal/buscar/${busca}`)
-            .then( res=>{
                 
-               
-                this.setState({ 
-                   idDatoPersonal: res.data.data[0].idDatoPersonal
-                })
-            })
                 const datos = { 
                     idDatoPersonal: this.state.idDatoPersonal,
                     Nucleo: this.state.Nucleo,
@@ -50,7 +77,14 @@ export default class Cargo extends Component {
                     NombreOtraInstitucion: this.state.NombreOtraInstitucion
                    
                 }
-               console.log(this.metodo(datos)) ;
+                if(this.state.mensaje === 'Todos los campos son Necesarios'){
+                    return
+                }
+                else{
+                    this.metodo(datos) ;
+                }
+                
+               
 
                
         }
@@ -60,10 +94,11 @@ export default class Cargo extends Component {
                 .then( res=>{
                    
                    const code= res.data[0].idCargoOpsu;
-                   console.log(code)
+                   
                     this.setState({ 
                         idCargoOpsu: code
                     })
+                    
                 })
         }
         
@@ -75,7 +110,9 @@ export default class Cargo extends Component {
                data: datos
            }) 
             .then(res =>{
-                console.log(res);
+                this.setState({
+                    mensaje: res.data.msg
+                })
                 console.log(res.data);
             })
 
@@ -220,9 +257,7 @@ export default class Cargo extends Component {
                     
                 </select>
                 </div>
-                <div className="form-group col-3">   
-             <input className="form-control mr-sm-2" type="text" placeholder="cedula del empleado" name="buscar" onChange={event => this.valueToState(event.target)}/>
-            </div>
+                
                 </div>
                 
                 
@@ -281,11 +316,21 @@ export default class Cargo extends Component {
                 </fieldset>
 
                 <div className="modal-footer">
-        <button type="submit" className="btn btn-primary btn-block">Crear</button>
+        <button onClick={this.toggle} type="submit" className="btn btn-primary btn-block">Crear</button>
         
       </div>
                 </form>
                 </div>
+                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+          <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+          <ModalBody>
+              {this.state.mensaje}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.toggle}>OK</Button>
+            
+          </ModalFooter>
+        </Modal>
                 </div>
                 </div>
 </div>

@@ -13,7 +13,18 @@ export default class Perfil extends Component   {
             EstadoCivil:'',
             Nacionalidad:'',
             NHijos:'',
-            FechaNacimiento:''
+            FechaNacimiento:'',
+            SueldoTabla:'',
+            BonoJefatura:'',
+            PrimaFamiliar:'',
+            BonoLacteo:'',
+            PrimaGradoAcademico:'',
+            PrimaProfecionalizacion:'',
+            PrimaHijoDiscapacidad:'',
+            PrimaApoyo:'',
+            PrimaChoferSupervisor:'',
+            PasoAutomatico:'',
+            AporteCajaAhorro:''
         };
 
         valueToState = ({ name, value, checked, type }) => {
@@ -28,8 +39,11 @@ export default class Perfil extends Component   {
                
                 
                 const res= await axios.get (`/datospersonal/buscar/${this.state.username}`)
-                
+                const bremu=res.data.data[0].idDatoPersonal;
+                const remuneracion= await axios.get(`/remuneracion/${bremu}`)
+
                     console.log(res.data.data[0])
+                    console.log(remuneracion.data.data[0].SueldoTabla)
                    const date= await new Date( res.data.data[0].FechaNacimiento);
                     const fecha= date.getDate() +'/'+(date.getMonth())+'/'+(date.getFullYear());
                     
@@ -41,7 +55,18 @@ export default class Perfil extends Component   {
                         FechaNacimiento: fecha ,
                         EstadoCivil: res.data.data[0].EstadoCivil,
                         Nacionalidad: res.data.data[0].Nacionalidad,
-                        NHijos: res.data.data[0].NHijos
+                        NHijos: res.data.data[0].NHijos,
+                        SueldoTabla: remuneracion.data.data[0].SueldoTabla,
+                        BonoJefatura:remuneracion.data.data[0].BonoJefatura,
+                        PrimaFamiliar:remuneracion.data.data[0].PrimaFamiliar,
+                        BonoLacteo:remuneracion.data.data[0].BonoLacteo,
+                        PrimaGradoAcademico:remuneracion.data.data[0].PrimaGradoAcademico,
+                        PrimaProfecionalizacion:remuneracion.data.data[0].PrimaProfecionalizacion,
+                        PrimaHijoDiscapacidad:remuneracion.data.data[0].PrimaHijoDiscapacidad,
+                        PrimaApoyo:remuneracion.data.data[0].PrimaApoyo,
+                        PrimaChoferSupervisor:remuneracion.data.data[0].PrimaChoferSupervisor,
+                        PasoAutomatico:remuneracion.data.data[0].PasoAutomatico,
+                        AporteCajaAhorro:remuneracion.data.data[0].AporteCajaAhorro
                     })
                 
                   
@@ -233,6 +258,7 @@ export default class Perfil extends Component   {
                 value={this.state.NHijos}
                 onChange={event => this.valueToState(event.target)}/>
                 </div>
+                
                 </div>
                 </div>
                 </div>
@@ -247,6 +273,167 @@ export default class Perfil extends Component   {
                 </form>
                 </div>
                 </div>
+                </div>
+                <div className="form-group card border-dark  ">
+   
+            <div className="card mt-3  ">
+            <div className="card-body ">
+                
+                {/* <pre>{JSON.stringify(this.state, null, 2)}</pre> */}
+                
+                <form >
+                <fieldset>
+            <legend 
+            className="text-center">Remuneraciones
+            </legend>
+            <div className="card mt-3 py-2 card border-dark ">
+            <div className="card-body">
+                <div className="form-group row">
+                
+            
+    
+            <div className="form-group col-3">
+                <label className="SueldoTabla">SueldoTabla
+                </label>
+                <input type="double"
+                className="form-control "
+                name="SueldoTabla"
+                id="sueldoTabla" 
+                value={this.state.SueldoTabla}
+                onChange={event => this.valueToState(event.target)}/>
+                </div>
+
+                <div className="form-group col-3">
+                <label className="BonoJefatura ">Bono de Jefatura</label>
+                <input type="double"
+                className="form-control "
+                name="BonoJefatura"
+                    id="bonoJefatura"                     
+                    value={this.state.BonoJefatura}
+                    onChange={event => this.valueToState(event.target)}/>
+                
+                </div>
+
+                <div className="form-group col-3">
+                <label className="PrimaFamiliar">Prima Familiar</label>
+                <input type="double"
+                className="form-control "
+                name="PrimaFamiliar"
+                    id="primaFamiliar"                     
+                    value={this.state.PrimaFamiliar}
+                    onChange={event => this.valueToState(event.target)}/>
+                
+                </div>
+
+                <div className="form-group col-3">
+                <label className="BonoLacteo ">Bono Lácteo</label>
+                <input type="double"
+                className="form-control "
+                name="BonoLacteo"
+                    id="bonoLacteo"                     
+                    value={this.state.BonoLacteo}
+                    onChange={event => this.valueToState(event.target)}/>
+                
+                </div>
+
+                <div className="form-group col-4">
+                <label className="PrimaGradoAcDocente ">Prima Grado Academico</label>
+                <input type="double"
+                className="form-control "
+                name="PrimaGradoAcademico"
+                    id="PrimaGradoAcademico"                     
+                    value={this.state.PrimaGradoAcademico}
+                    onChange={event => this.valueToState(event.target)}/>
+                
+                </div>
+
+                <div className="form-group col-3">
+                <label className="PrimaPofecionalizacion ">Prima Profecionalizacion</label>
+                <input type="double"
+                className="form-control "
+                name="PrimaProfecionalizacion"
+                    id="primaProfecionalizacion"                     
+                    value={this.state.PrimaProfecionalizacion}
+                    onChange={event => this.valueToState(event.target)}/>
+                
+                </div>
+
+                <div className="form-group col-3">
+                <label className="PrimaHijo">Prima Hijo con Discapacidad</label>
+                <input type="double"
+                className="form-control "
+                name="PrimaHijoDiscapacidad"
+                    id="primaHijo"                     
+                    value={this.state.PrimaHijoDiscapacidad}
+                    onChange={event => this.valueToState(event.target)}/>
+                
+                </div>
+
+                <div className="form-group col-4">
+                <label className="PrimaApoyo ">Prima Apoyo Act.Doc. Y de Investigacion</label>
+                <input type="double"
+                className="form-control "
+                name="PrimaApoyo"
+                    id="primaApoyo"                     
+                    value={this.state.PrimaApoyo}
+                    onChange={event => this.valueToState(event.target)}/>
+                
+                </div>
+
+                <div className="form-group col-3">
+                <label className="PrimaChoferes ">Prima Choferes y Supervisores</label>
+                <input type="double"
+                className="form-control "
+                name="PrimaChoferSupervisor"
+                    id="primaChoferes"                     
+                    value={this.state.PrimaChoferSupervisor}
+                    onChange={event => this.valueToState(event.target)}/>
+                
+                </div>
+
+                <div className="form-group col-3">
+                <label className="PasoAutomatico ">Paso Automático</label>
+                <input type="double"
+                className="form-control "
+                name="PasoAutomatico"
+                    id="pasoAutomatico"                     
+                    value={this.state.PasoAutomatico}
+                    onChange={event => this.valueToState(event.target)}/>
+                
+                </div>
+
+                <div className="form-group col-3">
+                <label className="AporteCaja">Aporte Caja de Ahorro</label>
+                <input type="double"
+                className="form-control "
+                name="AporteCajaAhorro"
+                    id="aporteCaja"                     
+                    value={this.state.AporteCajaAhorro}
+                    onChange={event => this.valueToState(event.target)}/>
+                
+                </div>
+                </div>
+                
+                
+                </div>
+                
+                </div>
+                
+                
+                
+                
+               
+                
+               
+                </fieldset>
+
+                
+                </form>
+                
+                </div>
+                
+                </div>
+                
                 </div>
             </div>
         )

@@ -3,14 +3,18 @@ import axios from 'axios';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 
-export default class Formacion extends Component {
+export default class Detalles extends Component {
     constructor(props) {
         super(props);
    this.state={
         idDatoPersonal:this.props.idDato,
-        GradoInstitucion:'',
-        TituloPregrado:'',
-        UniversidadPre:'',
+        Discapacidad:'',
+        FechaJubilacion:'',
+        FechaVigencia:'',
+        FechaIngresoInicial:'',
+        idUsuario:localStorage.getItem('idUsuario'),
+        Created:'',
+        Update:'',
         mensaje:''
             
         };
@@ -32,7 +36,7 @@ export default class Formacion extends Component {
         }
 
         validacion(){
-            if(this.state.idDatoPersonal === '' || this.state.GradoInstitucion=== ''|| this.state.TituloPregrado=== '' || this.state.UniversidadPre ==='' ){
+            if(this.state.idDatoPersonal === '' || this.state.Discapacidad=== '' || this.state.FechaIngresoInicial ==='' || this.state.FechaVigencia ===''){
                 this.setState({
                     mensaje: 'Todos los campos son Necesarios',
                     
@@ -55,9 +59,11 @@ export default class Formacion extends Component {
                 e.preventDefault();
                 const datos = { 
                     idDatoPersonal:this.state.idDatoPersonal,
-                    GradoInstitucion: this.state.GradoInstitucion,
-                    TituloPregrado:this.state.TituloPregrado,
-                    UniversidadPre: this.state.UniversidadPre,
+                    Discapacidad: this.state.Discapacidad,
+                    FechaJubilacion:this.state.FechaJubilacion,
+                    FechaIngresoInicial: this.state.FechaIngresoInicial,
+                    FechaVigencia: this.state.FechaVigencia,
+                    idUsuario:this.state.idUsuario
                     
                 }
                 if(this.state.mensaje === 'Todos los campos son Necesarios'){
@@ -73,7 +79,7 @@ export default class Formacion extends Component {
         async metodo(datos){
            const respuesta = await axios({
                method: 'POST',
-               url: '/formacion',
+               url: '/detalles',
                data: datos
            }) 
             .then(res =>{
@@ -101,34 +107,29 @@ export default class Formacion extends Component {
                 <form onSubmit={this.handleSubmit.bind(this)}>
             <fieldset>
             <legend 
-            className="text-center">Formación Academica
+            className="text-center">Detalles
             </legend>
             <div className="card mt-3 py-2 card border-dark mb-3">
             <div className="card-body">
                 <div className="form-group row">
 
                 <div className="form-group col-3">
-                <label className="GradoInstitucion">Grado de Institución</label>
-                <select className="form-control  "
-                name="GradoInstitucion"
-                id="GradoInstitucion"
-                onChange={event => this.valueToState(event.target)}>
-                    <option>Seleccione Grado</option>
-                    <option>Media</option>
-                    <option>T.S.U</option>
-                    <option>Pregrado</option>
-                    <option>Post-Grado</option>
-                    
-                </select>
+                <label className="GradoInstitucion">Discapacidad</label>
+                <input type="text"
+                className="form-control "
+                name="Discapacidad"
+                    id="Discapacidad"                     
+                    placeholder="Ingrese Discapacidad o coloque NO"
+                    onChange={event => this.valueToState(event.target)}/>
                 </div>
 
                 <div className="form-group col-5">
-                <label className="TituloPreGrado-TSU">Titulo de PreGrado</label>
-                <input type="text"
+                <label className="TituloPreGrado-TSU">FechaJubilacion</label>
+                <input type="date"
                 className="form-control "
-                name="TituloPregrado"
-                    id="TituloPregrado"                     
-                    placeholder="Ingrese un Titulo de pregrado-TSU "
+                name="FechaJubilacion"
+                    id="FechaJubilacion"                     
+                    
                     onChange={event => this.valueToState(event.target)}/>
                 
                 </div>
@@ -138,17 +139,26 @@ export default class Formacion extends Component {
                 </div>
                 <div className="form-group row ">
                 <div className="form-group col-5">
-                <label className="UniversidadPreGrado-TSU">Nombre de la Universidad</label>
-                <input type="text"
+                <label className="UniversidadPreGrado-TSU">Fecha Ingreso Inicial</label>
+                <input type="date"
                 className="form-control "
-                name="UniversidadPre"
-                    id="UniversidadPre"                     
-                    placeholder="Ingrese Nombre de la Universidad-TSU "
+                name="FechaIngresoInicial"
+                    id="FechaIngresoInicial"                     
+                    
                     onChange={event => this.valueToState(event.target)}/>
                 
                 </div>
 
+                <div className="form-group col-5">
+                <label className="UniversidadPreGrado-TSU">Fecha Vigencia</label>
+                <input type="date"
+                className="form-control "
+                name="FechaVigencia"
+                    id="FechaVigencia"                     
+                    
+                    onChange={event => this.valueToState(event.target)}/>
                 
+                </div>
                 
                 
                 </div>

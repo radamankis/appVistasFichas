@@ -1,9 +1,12 @@
 import React,{Component} from 'react';
 import axios from 'axios';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 export default class TipoCargo extends Component {
- 
-    state={
+    constructor(props) {
+        super(props);
+   this.state={
+        idDatoPersonal:this.props.idDato,
         Generico:'',
         Especifico:'',
         DedicacionLaboral:'',
@@ -12,6 +15,36 @@ export default class TipoCargo extends Component {
         CondicionLaboral:'',
            
         };
+
+        this.toggle = this.toggle.bind(this);
+    }
+
+    toggle() {
+        const agre= this.validacion();
+         if(agre){
+             this.setState({
+                mensaje:'',
+                 formu: true
+             })
+         }
+          this.setState(prevState => ({
+            modal: !prevState.modal
+           
+          }));
+        }
+
+        validacion(){
+            if(this.state.idDatoPersonal === '' || this.state.Generico=== ''|| this.state.Especifico=== '' || this.state.CondicionLaboral ===''||  this.state.DedicacionLaboral ===''|| this.state.Categoria ===''|| this.state.ActividadLaboral ==='' ){
+                this.setState({
+                    mensaje: 'Todos los campos son Necesarios',
+                    
+                })
+              return false;
+            }
+            
+           
+            return true;
+          }
 
         valueToState = ({ name, value, checked, type }) => {
             this.setState(() => {
@@ -23,6 +56,7 @@ export default class TipoCargo extends Component {
             handleSubmit (e){
                 e.preventDefault();
                 const datos = { 
+                    idDatoPersonal:this.state.idDatoPersonal,
                     Generico: this.state.Generico,
                     Especifico:this.state.Especifico,
                     DedicacionLaboral: this.state.DedicacionLaboral,
@@ -31,7 +65,12 @@ export default class TipoCargo extends Component {
                     CondicionLaboral: this.state.CondicionLaboral,
                    
                 }
-               console.log(this.metodo(datos)) ;
+                if(this.state.mensaje === 'Todos los campos son Necesarios'){
+                    return
+                }
+                else{
+                    this.metodo(datos) ;
+                }
 
                
         }
@@ -43,8 +82,12 @@ export default class TipoCargo extends Component {
                data: datos
            }) 
             .then(res =>{
-                console.log(res);
+                this.setState({
+                    mensaje: res.data.msg
+                })
                 console.log(res.data);
+    
+                
             })
 
             return respuesta;
@@ -224,12 +267,22 @@ export default class TipoCargo extends Component {
                 </fieldset>
 
                 <div className="modal-footer">
-        <button type="submit" className="btn btn-primary btn-block">Crear</button>
+        <button onClick={this.toggle} type="submit" className="btn btn-primary btn-block">Crear</button>
         
       </div>
                 </form>
                 </div>
                 </div>
+                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+          <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+          <ModalBody>
+              {this.state.mensaje}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.toggle}>OK</Button>
+            
+          </ModalFooter>
+        </Modal>
                 </div>
 </div>
         )

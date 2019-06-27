@@ -18,6 +18,7 @@ import ListarUsuarios from './componentes/ListarUsuarios';
 import Perfil from './componentes/Perfil';
 import Perfil2 from './componentes/Perfil2';
 import Principal from './componentes/Principal';
+import NuevoUsuario2 from './componentes/NuevoUsuario2';
 
 //import FormularioUsuario from './FormularioUsuario';
 
@@ -30,7 +31,8 @@ const MyRoute = ( props)=>(
 
 const Logout = ()=>{
   localStorage.clear();
-  return <Redirect to="/login"/>
+  window.location.href= 'http://localhost:3000/login'
+  
 }
 
 
@@ -62,6 +64,7 @@ const Logout = ()=>{
       
        <Route exact path="/" component={Principal}/>
           <Route exact path="/nuevo-usuario" component={NuevoUsuario}/>
+          <Route exact path="/nuevo-usuario2" component={NuevoUsuario2}/>
           <Route exact path="/datospersonal" component={DatosPersonal}/>
           <Route exact path="/formacion" component={Formacion}/>
           <Route exact path="/postgrado" component={Postgrado}/>

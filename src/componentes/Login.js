@@ -26,86 +26,94 @@ export default class Login extends Component {
   }
   toggle() {
     const agre= this.validacion();
-    
+    if(agre){
+      this.setState({
+         mensaje:''
+          
+      })
+  }
       this.setState(prevState => ({
         modal: !prevState.modal
        
       }));
     }
 
-  onChange(e){
-    this.setState({
-      [e.target.id]: e.target.value
-    })
-  }
+    valueToState = ({ name, value, checked, type }) => {
+      this.setState(() => {
+        return { [name]: type === "checkbox" ? checked : value };
+      });
+    };
   
-  save(e){
-    if (!this.validacion()){
-      return;
-    }
+  
 
-    this.setState({
-      message: 'Usuario Creado'
-    })
-
-  }
+    
 
  async handleSingIn(e){
   e.preventDefault();
     
-        const dato =  {username: this.state.username,
+        const datos =  {username: this.state.username,
                         password: this.state.password
                       };
-    const res =  await axios({
-        method: 'POST',
-        url: '/login',
-        data: dato
-        
-      })
-      console.log(res.data.data)
-       const {ok , token,data, err}=res.data;
-      
-      if(!ok){
-        this.setState({
-          logueado: false,
-          mensaje: err.mensage
-        })
-      } else{
-        this.setState({
-          logueado: true,
-          mensaje: "Logueado Correctamente"
-        })
-        localStorage.setItem('token', token);
-         localStorage.setItem('username', res.data.data.username);
-         localStorage.setItem('role', res.data.data.role);
-        
-         if(res.data.data.role === 'Empleado' ){
-            this.setState({
-              Empleado: true
-            })
-         }
-         if(res.data.data.role === 'USER' ){
-          this.setState({
-            USER: true
-          })
-       }
-       if(res.data.data.role === 'ADMIN' ){
-        this.setState({
-          ADMIN: true
-        })
-     }
-      }
-      
+
+                      if(this.state.mensaje === 'Todos los campos son Necesarios'){
+                        return
+                    }
+                    else{
+                        this.metodo(datos) ;
+                    }
+       
      
       
     
+      }
+      async metodo(datos){
+        const res =  await axios({
+          method: 'POST',
+          url: '/login',
+          data: datos
+          
+        })
+        console.log(res.data.data)
+         const {ok , token,data, err}=res.data;
+        
+        if(!ok){
+          this.setState({
+            logueado: false,
+            mensaje: err.mensage
+          })
+        } else{
+          this.setState({
+            logueado: true,
+            mensaje: "Logueado Correctamente"
+          })
+          localStorage.setItem('token', token);
+          localStorage.setItem('idUsuario', res.data.data.idUsuario);
+           localStorage.setItem('username', res.data.data.username);
+           localStorage.setItem('role', res.data.data.role);
+          
+           if(res.data.data.role === 'Empleado' ){
+              this.setState({
+                Empleado: true
+              })
+           }
+           if(res.data.data.role === 'USER' ){
+            this.setState({
+              USER: true
+            })
+         }
+         if(res.data.data.role === 'ADMIN' ){
+          this.setState({
+            ADMIN: true
+          })
+       }
+        }
       }
     
   
   validacion(){
     if(this.state.username ==='' || this.state.password==='' ){
       this.setState({
-        message: 'Todo los campos son necesarios'
+        mensaje: 'Todo los campos son necesarios'
       })
       return false;
     }
@@ -141,7 +149,7 @@ export default class Login extends Component {
     aria-describedby="nombreHelp" 
     placeholder="Ingrese Usuario"
     value={this.state.username}
-    onChange={this.onChange.bind(this)}/>
+    onChange={event => this.valueToState(event.target)}/>
   <small id="nombrelHelp" 
   className="form-text text-muted m-auto">Nombre de usuario.
   </small>
@@ -155,7 +163,7 @@ export default class Login extends Component {
   name="password"
   placeholder="Password"
   value={this.state.password}
-  onChange={this.onChange.bind(this)}/>
+  onChange={event => this.valueToState(event.target)}/>
 </div>
 </div>
 
@@ -183,9 +191,9 @@ export default class Login extends Component {
           </ModalFooter>
         </Modal>
 
-         { vista && <Redirect to='/perfil2'/> }  
-         { vista2 && <Redirect to='/listarempleados'/> } 
-         { vista3 && <Redirect to='/nuevo-usuario'/> } 
+         { vista ? window.location.href= 'http://localhost:3000/perfil2':'' }  
+         { vista2 ? window.location.href= 'http://localhost:3000/datospersonal':'' } 
+         { vista3 ? window.location.href= 'http://localhost:3000/datospersonal':'' } 
 
 
             </div>                

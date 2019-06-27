@@ -1,9 +1,12 @@
 import React,{Component} from 'react';
 import axios from 'axios';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+
 
 export default class Remuneraciones extends Component {
-    
-    state={
+    constructor(props) {
+        super(props);
+   this.state={
         idDatoPersonal: this.props.idDato,
         SueldoTabla:'',
         BonoJefatura:'',
@@ -16,10 +19,39 @@ export default class Remuneraciones extends Component {
         PrimaChoferSupervisor:'',
         PasoAutomatico:'',
         AporteCajaAhorro:'',
-
+        mensaje:''
 
             
         };
+        this.toggle = this.toggle.bind(this);
+    }
+
+    toggle() {
+        const agre= this.validacion();
+         if(agre){
+             this.setState({
+                mensaje:'',
+                 formu: true
+             })
+         }
+          this.setState(prevState => ({
+            modal: !prevState.modal
+           
+          }));
+        }
+
+        validacion(){
+            if(this.state.idDatoPersonal === '' || this.state.SueldoTabla=== ''|| this.state.BonoJefatura=== '' || this.state.PrimaFamiliar ==='' || this.state.BonoLacteo === ''|| this.state.PrimaGradoAcademico === '' || this.state.PrimaProfecionalizacion ==='' || this.state.PrimaChoferSupervisor==='' || this.state.PrimaApoyo==='' || this.state.PrimaHijoDiscapacidad==='' || this.state.PasoAutomatico==='' || this.state.AporteCajaAhorro===''){
+                this.setState({
+                    mensaje: 'Todos los campos son Necesarios',
+                    
+                })
+              return false;
+            }
+            
+           
+            return true;
+          }
 
         valueToState = ({ name, value, checked, type }) => {
             this.setState(() => {
@@ -30,7 +62,7 @@ export default class Remuneraciones extends Component {
 
            async handleSubmit (e){
                 e.preventDefault();
-                const busca= this.state.buscar;
+                
         //    await axios.get(`/datospersonal/buscar/${busca}`)
         //     .then( res=>{
                 
@@ -54,7 +86,13 @@ export default class Remuneraciones extends Component {
                     AporteCajaAhorro: this.state.AporteCajaAhorro
                     
                 }
-              this.metodo(datos) ;
+                if(this.state.mensaje === 'Todos los campos son Necesarios'){
+                    return
+                }
+                else{
+                    this.metodo(datos) ;
+                }
+              
 
                
         }
@@ -67,8 +105,10 @@ export default class Remuneraciones extends Component {
                data: datos
            }) 
             .then(res =>{
-                console.log(res);
-                console.log(res.data);
+                this.setState({
+                    mensaje: res.data.msg
+                })
+                console.log(res.data.msg);
             })
 
             return respuesta;
@@ -77,7 +117,7 @@ export default class Remuneraciones extends Component {
         
 
     render() {
-        const {idDato}= this.props.idDato;
+        
         
         return (
             <div><h2 className="card-title text-center mb-5">Sistema de Administracion de Personal
@@ -237,13 +277,22 @@ export default class Remuneraciones extends Component {
                 </fieldset>
 
                 <div className="modal-footer">
-        <button type="submit" className="btn btn-primary btn-block">Agregar</button>
+        <button onClick={this.toggle} type="submit" className="btn btn-primary btn-block">Agregar</button>
         
       </div>
                 </form>
                 
                 </div>
-                
+                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+          <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+          <ModalBody>
+              {this.state.mensaje}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.toggle}>OK</Button>
+            
+          </ModalFooter>
+        </Modal>
                 </div>
                 
                 </div>

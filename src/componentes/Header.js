@@ -20,6 +20,10 @@ export default class Header extends Component {
                     Login
                 </Link>
                 </div> 
+                <div><Link to="/logout" className="navbar-brand">
+                    Salir
+                </Link>
+                </div>
             
                 
        { this.state.estado === 'ADMIN'  ?
@@ -37,32 +41,11 @@ export default class Header extends Component {
                             Agregar Usuario
                         </Link>
                     </li>
-                    <li className="navbar-item">
-                        <Link to='/cargo'
-                        className="nav-link">
-                            Cargo
-                        </Link>
-                    </li>
-                    <li className="navbar-item">
-                        <Link to='/formacion'
-                        className="nav-link">
-                            Formacion Academica
-                        </Link>
-                    </li>
-                    <li className="navbar-item">
-                        <Link to='/postgrado'
-                        className="nav-link">
-                            Postgrado
-                        </Link>
-                    </li>
+                    
+                    
                    
                     
-                    <li className="navbar-item">
-                        <Link to='/tipocargo'
-                        className="nav-link">
-                            Tipo Cargo
-                        </Link>
-                    </li>
+                    
                     
                     
                     <li className="navbar-item">
@@ -79,10 +62,7 @@ export default class Header extends Component {
                         </Link>
                     </li>
                     
-                    <div><Link to="/logout" className="navbar-brand">
-                    Salir
-                </Link>
-                </div>
+                    
                 </ul>
             </div>
        : '' }
@@ -97,32 +77,12 @@ export default class Header extends Component {
                         </Link>
                     </li>
                     
-                    <li className="navbar-item">
-                        <Link to='/cargo'
-                        className="nav-link">
-                            Cargo
-                        </Link>
-                    </li>
-                    <li className="navbar-item">
-                        <Link to='/formacion'
-                        className="nav-link">
-                            Formacion Academica
-                        </Link>
-                    </li>
-                    <li className="navbar-item">
-                        <Link to='/postgrado'
-                        className="nav-link">
-                            Postgrado
-                        </Link>
-                    </li>
+                    
                    
                     
-                    <li className="navbar-item">
-                        <Link to='/tipocargo'
-                        className="nav-link">
-                            Tipo Cargo
-                        </Link>
-                    </li>
+                   
+                    
+                    
                     
                     
                     
@@ -134,10 +94,7 @@ export default class Header extends Component {
                         </Link>
                     </li>
                     
-                    <div><Link to="/logout" className="navbar-brand">
-                    Salir
-                </Link>
-                </div>
+                    
                 </ul>
             </div>
        : '' }
@@ -145,11 +102,9 @@ export default class Header extends Component {
             <div className="container">
                 <ul className="navbar-nav mr-auto">
                    
-                    <div><Link to="/logout" className="navbar-brand">
-                    Salir
-                </Link>
+                    
                 
-                </div> 
+                 
                 </ul> 
                 </div>:''}
         </nav>

@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import axios from 'axios';
-import Tabla from './tabla'
+import Tabla2 from './tabla2'
 
 
 class ListarEmpleados extends Component {
@@ -44,7 +44,7 @@ componentDidMount() {
         
                 
                 <div className='container'>
-                    <Tabla users={this.state.users}/>
+                    <Tabla2 users={this.state.users}/>
                     </div>
                 </div> 
                 </div>

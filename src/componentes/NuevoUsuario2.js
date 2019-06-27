@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 
-export default class NuevoUsuario extends Component {
+export default class NuevoUsuario2 extends Component {
   constructor(props) {
     super(props);
 this.state={
@@ -136,8 +136,7 @@ this.state={
    value={this.state.role}
    onChange={this.onChange.bind(this)}>
      <option value="">Seleccione un tipo de usuario</option>
-    <option value="ADMIN">ADMIN</option>
-    <option value="USER">USER</option>
+    
     <option value="Empleado">Empleado</option>
     
   </select>

@@ -1,18 +1,25 @@
 import React,{Component} from 'react';
 import axios from 'axios';
 import Remuneraciones from './Remuneraciones';
+import Cargo from './Cargo';
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Formacion from './Formacion';
+import PosGrado from './Postgado';
+import TipoCargo from './TipoCargo';
+import Detalles from './Detalles';
+import TipoPersonal from './TipoPersonal';
 
 
     
   
-import Msj from './Msj';
+
 
 export default class DatosPersonal extends Component {
     constructor(props) {
         super(props);
    this.state={
+            tipo:localStorage.getItem('role'),
             Nombre:'',
             Apellido:'',
             Cedula:'',
@@ -23,6 +30,13 @@ export default class DatosPersonal extends Component {
             FechaNacimiento:'',
             btn: false,
             btn2: false,
+            btn3: false,
+            btn4: false,
+            btn5: false,
+            btn6: false,
+            btn7: false,
+            btn8: false,
+            btn9: false,
             id:'',
             formu: false,
             mensaje:'',
@@ -36,7 +50,8 @@ export default class DatosPersonal extends Component {
           const agre= this.validacion();
            if(agre){
                this.setState({
-                   btn2: true
+                  
+                   formu: true
                })
            }
             this.setState(prevState => ({
@@ -59,11 +74,8 @@ export default class DatosPersonal extends Component {
                 })
               return false;
             }
-            console.log(this.state.formu)
-           this.setState({
-                mensaje: 'Empleado Agregado',
-                formu: true
-            });
+            
+           
             return true;
           }
            async handleSubmit  (e){
@@ -96,14 +108,18 @@ export default class DatosPersonal extends Component {
                url: '/datospersonal',
                data: datos
            }) 
-            .then(res =>{
+            
+                console.log()
+            this.setState({
+                mensaje: respuesta.data.msg,
                 
-                this.setState({
-                    id:res.data.data.insertId
-                }) 
-                console.log(this.state.id)
             })
-
+            if(this.state.mensaje === 'Datos Creado'){
+                this.setState({
+                    btn2: true,
+                    id:respuesta.data.data.insertId
+                })
+            }
             return respuesta;
         }
 
@@ -114,10 +130,65 @@ export default class DatosPersonal extends Component {
             })
         }
 
+        cargo(e){
+            this.setState({
+                btn3: true,
+                id:this.state.id
+            })
+        }
+        formacion(e){
+            this.setState({
+                btn4: true,
+                id:this.state.id
+            })
+        }
+        posgrado(e){
+            this.setState({
+                btn5: true,
+                id:this.state.id
+            })
+        }
+        tipocargo(e){
+            this.setState({
+                btn6: true,
+                id:this.state.id
+            })
+        }
+        detalles(e){
+            this.setState({
+                btn7: true,
+                id:this.state.id
+            })
+        }
+        tipopersonal(e){
+            this.setState({
+                btn8: true,
+                id:this.state.id
+            })
+        }
+        finalizar(e){
+            this.setState({
+                btn9: true,
+                
+            })
+            
+            
+        }
+
+
+        
+
     render() {
         const agregar= this.state.btn2;
         const rem =this.state.btn;
-        const formulario= this.state.formu;
+        const cargo=this.state.btn3;
+        const formacion=this.state.btn4;
+        const posgrado=this.state.btn5;
+        const tipocargo=this.state.btn6;
+        const detalles= this.state.btn7;
+        const tipopersonal= this.state.btn8;
+        
+        const finalizar= this.state.btn9;
        
         return (
             
@@ -286,6 +357,13 @@ export default class DatosPersonal extends Component {
       </div>
                 </form>
                 {agregar ? <button type="btn" className="btn btn-primary btn-block" onClick={this.remuneracion.bind(this)}  >Agregar Remuneraciones</button> : ''}
+                {agregar ? <button type="btn" className="btn btn-primary btn-block" onClick={this.cargo.bind(this)}  >Agregar Cargo</button> : ''}
+                {agregar ? <button type="btn" className="btn btn-primary btn-block" onClick={this.formacion.bind(this)}  >Agregar Fromacion Academica</button> : ''}
+                {agregar ? <button type="btn" className="btn btn-primary btn-block" onClick={this.posgrado.bind(this)}  >Agregar Posgrado</button> : ''}
+                {agregar ? <button type="btn" className="btn btn-primary btn-block" onClick={this.tipocargo.bind(this)}  >Agregar Tipo de Cargo</button> : ''}
+                {agregar ? <button type="btn" className="btn btn-primary btn-block" onClick={this.detalles.bind(this)}  >Agregar Detalles</button> : ''}
+                {agregar ? <button type="btn" className="btn btn-primary btn-block" onClick={this.tipopersonal.bind(this)}  >Agregar Tipo de Personal</button> : ''}
+                {rem && cargo && formacion && posgrado && tipocargo && tipopersonal && detalles ? <button type="btn" className="btn btn-primary btn-block" onClick={this.finalizar.bind(this)}  >Crear Usuario</button> : ''}
                 </div>
 
                 </div> 
@@ -306,6 +384,14 @@ export default class DatosPersonal extends Component {
                 </div>
                
                 { rem ? <Remuneraciones idDato= {this.state.id}/> : ''}
+                { cargo ? <Cargo idDato= {this.state.id}/> : ''}
+                { formacion ? <Formacion idDato= {this.state.id}/> : ''}
+                { posgrado ? <PosGrado idDato= {this.state.id}/> : ''}
+                { tipocargo ? <TipoCargo idDato= {this.state.id}/> : ''}
+                { detalles ? <Detalles idDato= {this.state.id}/> : ''}
+                { tipopersonal ? <TipoPersonal idDato= {this.state.id}/> : ''}
+                { finalizar && this.state.tipo=== 'ADMIN'? window.location.href= 'http://localhost:3000/nuevo-usuario':'' }
+                { finalizar && this.state.tipo=== 'USER'? window.location.href= 'http://localhost:3000/nuevo-usuario2':'' }
                 </div>
                
         )

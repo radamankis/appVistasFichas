@@ -7,6 +7,7 @@ export default class NuevoUsuario extends Component {
   
 
     render() {
+    
         return (
             <div><h2 className="card-title text-center mb-5">Bienvenido al Sistema de Administracion de Personal
            </h2>
